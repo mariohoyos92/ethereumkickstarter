@@ -28,7 +28,7 @@
         uint public minimumContribution;
         mapping(address => bool) public approvers;
         Request[] public requests;
-        uint approversCount;
+        uint public approversCount;
         
         modifier restricted() {
             require(msg.sender == manager);
@@ -72,6 +72,18 @@
             require(request.approvalCount > (approversCount/2));
             request.recipient.transfer(request.value);
             request.complete = true;
+        }
+
+        function getSummary() public view returns(
+            uint, uint, uint, uint, address
+        ){
+            return (
+                minimumContribution, this.balance, requests.length, approversCount, manager
+            );
+        }
+
+        function getRequestsCount() public view returns (uint){
+            return requests.length;
         }
         
     }
